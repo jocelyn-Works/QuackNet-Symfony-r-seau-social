@@ -4,14 +4,32 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\Duck
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+            security: true
         main:
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
+            remember_me: # Configuration de  "Se souvenir de moi".
+                secret: '%kernel.secret%'
+            form_login: # Configuration de la connexion via le formulaire.
+                login_path: login # page de connexion
+                check_path: login # verification de l'authentification
+                enable_csrf: true # jeton csrf
+                default_target_path: app_quack-all  # après connexion redirection vers la route post
+                always_use_default_target_path: true
+            logout: # deconnexion
+                path: logout # chemin de dconnexion
+            login_throttling: # limitte les tentative de connexion
+                max_attempts: 3 # 4 tentative de connexion
+                interval: "5 minutes" #  5 minutes d'interval avant de pouvoir ressayer
+
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -22,7 +40,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

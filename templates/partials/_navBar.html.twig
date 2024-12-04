@@ -13,6 +13,7 @@
             <div class="px-2">
                 {% if is_granted('ROLE_USER') %}
                     <h5 class="offcanvas-title  m-1" id="offcanvasDarkNavbarLabel">{{app.user.duckname}}</h5>
+                    <img src="{{ asset(app.user.picture) }}" alt="Duck image" class="img-fluid rounded-circle border" style="width: 70px; height: auto;">
                 {% else %}
                     <h5 class="offcanvas-title  m-1" id="offcanvasDarkNavbarLabel">QuackNet</h5>
                 {% endif %}
@@ -33,27 +34,13 @@
                         <a class="nav-link" href="{{ path('logout') }}">Deconexion</a>
                     </li>
                     {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_quack-all') }}">Quacks</a>
+                        </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="{{ path('app_quack-all') }}">Quacks</a></li>
-
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
                     {% endif %}
                 </ul>
-                <form class="d-flex mt-3" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-success" type="submit">Search</button>
-                </form>
+
             </div>
         </div>
     </div>

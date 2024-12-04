@@ -18,7 +18,6 @@ class QuackRepository extends ServiceEntityRepository
 
     public function findAllQuacks() {
         return $this->createQueryBuilder('q')
-            ->where('q.parent IS NULL')
             ->orderBy('q.created_at', 'DESC')
             ->getQuery()
             ->getResult();
@@ -27,12 +26,15 @@ class QuackRepository extends ServiceEntityRepository
     public function findAllCommentQuack(int $id)
     {
         return $this->createQueryBuilder('q')
-            ->leftJoin('q.comments', 'c')
-            ->addSelect('c')
             ->where('q.id = :id')
             ->setParameter('id', $id)
+            ->leftJoin('q.author', 'a')
+            ->addSelect('a')
+            ->leftJoin('q.comments', 'c')
+            ->addSelect('c')
+            ->orderBy('q.created_at', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
 
     }
 

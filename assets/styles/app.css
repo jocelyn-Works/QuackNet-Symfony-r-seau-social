@@ -1,3 +1,18 @@
 body {
 padding:8rem;
 }
+
+.rating{
+    width: 20%;
+    color: grey;
+    margin-left: 4rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.rating-down{
+    color: red
+}
+.rating-up{
+    color: blue;
+}

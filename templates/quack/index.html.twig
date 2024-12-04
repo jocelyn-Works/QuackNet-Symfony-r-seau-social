@@ -6,84 +6,68 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Colonne gauche (Navigation, utilisateurs, etc.) -->
-            <aside class="col-md-2 p-3 bg-light">
-                <h5 class="text-center">Navigation</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Fil d'actualités</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Messages</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Paramètres</a>
-                    </li>
-                </ul>
-            </aside>
+            {% include "partials/_leftBar.html.twig" %}
 
             <!-- Colonne centrale (Publications) -->
             <section class="col-md-8 p-3">
                 <!-- Formulaire de publication -->
                 <div class="card mb-4">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Partagez votre Quack</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Partagez votre Quack</h5>
 
-                            {{ form_start(quackForm) }}
+                        {{ form_start(quackForm) }}
 
-                            <!-- Création d'une ligne avec deux colonnes : content et image + envoyer -->
-                            <div class="row">
+                        <!-- Création d'une ligne avec deux colonnes : content et image + envoyer -->
+                        <div class="row">
 
-                                <!-- Colonne pour le contenu (70% de la largeur) -->
-                                <div class="col-md-8 mb-3">
-                                    <div class="form-group">
-                                        {{ form_row(quackForm.content, {'attr': {'class': 'form-control', 'placeholder': 'Exprimez-vous...'}}) }}
-                                    </div>
+                            <!-- Colonne pour le contenu (70% de la largeur) -->
+                            <div class="col-md-8 mb-3">
+                                <div class="form-group">
+                                    {{ form_row(quackForm.content, {'attr': {'class': 'form-control', 'placeholder': 'Exprimez-vous...'}}) }}
                                 </div>
-
-                                <!-- Colonne pour l'image (30% de la largeur) et le bouton "Envoyer" -->
-                                <div class="col-md-4 mb-3">
-                                    <!-- Champ d'upload d'image -->
-                                    <div class="form-group">
-                                        <label for="quackForm_picture" class="form-label">Téléchargez une image</label>
-                                        {{ form_row(quackForm.picture, {'attr': {'class': 'form-control-file', 'id': 'image', 'accept': '.png, .jpg, .jpeg, .webp', 'onchange': 'previewImage(this)'}}) }}
-                                    </div>
-
-                                    <!-- Prévisualisation de l'image -->
-                                    <div id="imagePreview" class="form-group mt-3 rounded" style="display:none; background-size: cover; width: 100%; height: 200px; border: 1px solid #ccc; background-position: center center;">
-                                        <!-- L'image prévisualisée s'affichera ici -->
-                                    </div>
-
-                                    <!-- Bouton "Envoyer" sous l'image, centré -->
-                                    <div class="d-flex justify-content-center mt-3">
-                                        <button type="submit" class="btn btn-primary w-100">Envoyer</button>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            {{ form_end(quackForm) }}
-                        </div>
-                    </div>
+                            <!-- Colonne pour l'image (30% de la largeur) et le bouton "Envoyer" -->
+                            <div class="col-md-4 mb-3">
+                                <!-- Champ d'upload d'image -->
+                                <div class="form-group">
+                                    <label for="quackForm_picture" class="form-label">Téléchargez une image</label>
+                                    {{ form_row(quackForm.picture, {'attr': {'class': 'form-control-file', 'id': 'image', 'accept': '.png, .jpg, .jpeg, .webp', 'onchange': 'previewImage(this)'}}) }}
+                                </div>
 
-                    <!-- Script pour prévisualiser l'image -->
-                    <script type="text/javascript">
-                        function previewImage(input) {
-                            if (input.files && input.files[0]) {
-                                var reader = new FileReader();
-                                reader.onload = function(e) {
-                                    // Modifier le style du div pour afficher l'image en arrière-plan
-                                    var imagePreview = document.getElementById('imagePreview');
-                                    imagePreview.style.backgroundImage = 'url(' + e.target.result + ')';
-                                    imagePreview.style.display = 'block'; // Afficher la prévisualisation
-                                }
-                                reader.readAsDataURL(input.files[0]);
+                                <!-- Prévisualisation de l'image -->
+                                <div id="imagePreview" class="form-group mt-3 rounded" style="display:none; background-size: cover; width: 100%; height: 200px; border: 1px solid #ccc; background-position: center center;">
+                                    <!-- L'image prévisualisée s'affichera ici -->
+                                </div>
+
+                                <!-- Bouton "Envoyer" sous l'image, centré -->
+                                <div class="d-flex justify-content-center mt-3">
+                                    <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {{ form_end(quackForm) }}
+                    </div>
+                </div>
+
+                <!-- Script pour prévisualiser l'image -->
+                <script type="text/javascript">
+                    function previewImage(input) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                // Modifier le style du div pour afficher l'image en arrière-plan
+                                var imagePreview = document.getElementById('imagePreview');
+                                imagePreview.style.backgroundImage = 'url(' + e.target.result + ')';
+                                imagePreview.style.display = 'block'; // Afficher la prévisualisation
                             }
+                            reader.readAsDataURL(input.files[0]);
                         }
-                    </script>
+                    }
+                </script>
+
                 <!-- Affichage des publications -->
                 {% for quack in quacks %}
                     <div class="card mb-3">
@@ -92,42 +76,25 @@
                             <p class="card-text">{{ quack.content }}</p>
                             {% if quack.picture %}
                                 <div class="post-image mb-3">
-                                    <img src="{{ asset(quack.picture) }}" class="img-fluid rounded" style="height:300px " alt="Post Image">
+                                    <img src="{{ asset(quack.picture) }}" class="img-fluid rounded" style="height:300px;" alt="Post Image">
                                 </div>
                             {% endif %}
                             <div class="text-muted">
-                                <small>{{ quack.createdAt ? quack.createdAt|date('Y-m-d H:i:s') : '' }}</small>
+                                <small>{{ quack.createdAt ? quack.createdAt|date('Y-m-d') : '' }}</small>
                             </div>
-                            <details >
-                                <summary> <i class="fa-solid fa-message"></i>
-                                    <strong>Commentaires : {{ quack.children.count }}</strong></summary>
-                                <div class="comments-section mt-3">
-                                    {% for child in quack.children %}
 
-                                        <div class="comment mb-3">
-                                            <!-- Affichage du nom d'utilisateur de l'auteur du commentaire (par exemple, le "duckname") -->
-                                            <div class="comment-author mb-1">
-                                                <strong>{{ child.author.duckname }}</strong>
-                                            </div>
+                            <!-- Gestion des likes -->
 
-                                            <!-- Contenu du commentaire -->
-                                            <div class="comment-content">
-                                                {{ child.content }}
-                                            </div>
+                                {% include "partials/_like.html.twig" with{rating: quack.rating, from: 'quack', id: quack.id} %}
 
-                                            <!-- Affichage de la date de publication du commentaire si nécessaire -->
-                                            <div class="comment-date text-muted">
-                                                <small>{{ child.createdAt ? child.createdAt|date('Y-m-d H:i:s') : '' }}</small>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <!-- Message lorsque le post n'a pas de commentaires -->
-                                        <div class="no-comments text-muted">
-                                            Aucun commentaire pour ce Quack.
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </details>
+
+                            <a href="{{path('app_comment', {id:quack.id})}}">
+                                <i class="fa-regular fa-comment fa-lg"></i>
+                            </a>
+
+                                    <strong>: {{ quack.nbresponse }}</strong>
+
+
                             <div class="mt-2">
                                 <!-- Vérification si l'utilisateur est le propriétaire du post -->
                                 {% if app.user == quack.author %}
@@ -143,14 +110,8 @@
             </section>
 
             <!-- Colonne droite (Suggestions, amis, etc.) -->
-            <aside class="col-md-2 p-3 bg-light">
-                <h5 class="text-center">Suggestions</h5>
-                <ul class="list-group">
-                    <li class="list-group-item">Amis à ajouter</li>
-                    <li class="list-group-item">Pages à suivre</li>
-                    <li class="list-group-item">Groupes populaires</li>
-                </ul>
-            </aside>
+            {% include "partials/_rightBar.html.twig" %}
+
         </div>
     </div>
 {% endblock %}

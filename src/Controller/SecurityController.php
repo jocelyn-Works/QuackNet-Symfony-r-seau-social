@@ -22,7 +22,7 @@ class SecurityController extends AbstractController
     {
         $this->em = $em;
     }
-    #[Route('/', name: 'signup')]
+    #[Route('/signup', name: 'signup')]
     public function signup(Request $request, UserPasswordHasherInterface $passwordHasher, UserAuthenticatorInterface $userAuthenticator): Response
     {
         $duck = new Duck();
@@ -31,6 +31,8 @@ class SecurityController extends AbstractController
         $duckForm->handleRequest( $request);
 
         if ($duckForm->isSubmitted() && $duckForm->isValid()) {
+
+            $duck->setPicture("image/coincoin.webp");
             $hash = $passwordHasher->hashPassword($duck, $duck->getPassword());
             $duck->setPassword($hash);
 
@@ -45,7 +47,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/login', name: 'login')]
+    #[Route('/', name: 'login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {           // connexion
 

@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commentaires - {{ quack.author.duckname }}{% endblock %}
+
+{% block body %}
+        <div class="container-fluid">
+                <div class="row">
+                        <!-- Colonne gauche (Navigation, utilisateurs, etc.) -->
+                        {% include "partials/_leftBar.html.twig" %}
+
+                        <!-- Colonne centrale (Détails de la publication et commentaires) -->
+                        <section class="col-md-8 p-3">
+                                <!-- Détails de la publication -->
+                                <div class="card mb-4">
+                                        <div class="card-body">
+                                                <h3>{{ quack.author.duckname }}</h3>
+                                                <p class="card-text">{{ quack.content }}</p>
+
+                                                {% if quack.picture %}
+                                                        <div class="post-image mb-3">
+                                                                <img src="{{ asset(quack.picture) }}" class="img-fluid rounded" style="height:300px;" alt="Post Image">
+                                                        </div>
+                                                {% endif %}
+                                                {% include "partials/_like.html.twig" with{rating: quack.rating, from: 'quack', id: quack.id} %}
+
+                                                <div class="text-muted">
+                                                        <small>{{ quack.createdAt ? quack.createdAt|date('Y-m-d') : '' }}</small>
+                                                </div>
+
+                                        </div>
+                                </div>
+
+                                <!-- Formulaire d'ajout de commentaire -->
+                                <div class="card mb-4">
+                                        <div class="card-body">
+                                                <h5 class="card-title">Ajoutez un commentaire</h5>
+
+                                                {{ form_start(form) }}
+                                                {{ form_row(form.content, {'attr': {'class': 'form-control', 'placeholder': 'Exprimez-vous...'}}) }}
+                                                <div class="d-flex justify-content-center mt-3">
+                                                        <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+                                                </div>
+                                                {{ form_end(form) }}
+                                        </div>
+                                </div>
+
+                                <!-- Affichage des commentaires -->
+                                <h5>Commentaires</h5>
+                                {% for comment in quack.comments %}
+                                        <div class="card mb-3">
+                                                <div class="card-body">
+                                                        <h6>{{ comment.author.duckname }}</h6>
+                                                        <p class="card-text">{{ comment.content }}</p>
+                                                        {% include "partials/_like.html.twig" with{rating: comment.rating, from: 'comment', id: comment.id} %}
+                                                        <div class="text-muted">
+                                                                <small>{{ comment.createdAt ? comment.createdAt|date('Y-m-d') : '' }}</small>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                {% else %}
+                                        <div class="alert alert-info">Aucun commentaire pour cette publication.</div>
+                                {% endfor %}
+                        </section>
+
+                        <!-- Colonne droite (Suggestions, amis, etc.) -->
+                        {% include "partials/_rightBar.html.twig" %}
+                </div>
+        </div>
+{% endblock %}

@@ -6,6 +6,8 @@
 parameters:
     quack.folder: '%kernel.project_dir%/public/quackPicture'
     quack.folder.public: 'quackPicture'
+    profile.folder: '%kernel.project_dir%/public/profiles'
+    profile.folder.public: 'profiles'
 
 services:
     # default configuration for services in *this* file
@@ -33,3 +35,8 @@ services:
         arguments:
             $quackFolder: '%quack.folder%'
             $quackFolderPublic: '%quack.folder.public%'
+
+    App\Service\UploaderPicture:
+        arguments:
+            $profileFolder: '%profile.folder%'
+            $profileFolderPublic: '%profile.folder.public%'

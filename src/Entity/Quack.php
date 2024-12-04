@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\QuackRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,12 +31,52 @@ class Quack
     #[ORM\ManyToOne(inversedBy: 'quacks')]
     private ?Duck $author = null;
 
-    #[ORM\ManyToOne(inversedBy: 'children')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Quack $parent = null;
+    #[ORM\Column]
+    private ?int $rating = null;
 
-    #[ORM\OneToMany(targetEntity: Quack::class, mappedBy: 'parent')]
-    private Collection $children;
+    #[ORM\Column]
+    private ?int $nbresponse = null;
+
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'quack')]
+    private Collection $likes;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'quack')]
+    private Collection $comments;
+
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->likes = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+
+    }
+
+    public function getNbresponse(): ?int
+    {
+        return $this->nbresponse;
+    }
+
+    public function setNbresponse(?int $nbresponse): void
+    {
+        $this->nbresponse = $nbresponse;
+    }
+
+
+
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?int $rating): void
+    {
+        $this->rating = $rating;
+    }
+
 
     public function getParent(): ?Quack
     {
@@ -72,11 +113,7 @@ class Quack
 
     /**
      */
-    public function __construct()
-    {
-        $this->created_at = new \DateTimeImmutable();
 
-    }
 
     public function getId(): ?int
     {
@@ -117,6 +154,66 @@ class Quack
     public function setPicture(?string $picture): static
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setQuack($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getQuack() === $this) {
+                $like->setQuack(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setQuack($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getQuack() === $this) {
+                $comment->setQuack(null);
+            }
+        }
 
         return $this;
     }

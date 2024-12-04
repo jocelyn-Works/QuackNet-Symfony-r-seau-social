@@ -27,6 +27,8 @@ class QuackController extends AbstractController
         $newQuack = new Quack();
         $form = $this->createForm(QuackType::class, $newQuack);
         $form->handleRequest($request);
+
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $picture = $form->get('picture')->getData();
@@ -37,6 +39,8 @@ class QuackController extends AbstractController
             }
 
             $newQuack->setAuthor($currentUser);
+            $newQuack->setRating(0);
+            $newQuack->setNbresponse(0);
 
 
             $entityManager->persist($newQuack);
@@ -54,6 +58,8 @@ class QuackController extends AbstractController
             'quackForm' => $form,
         ]);
     }
+
+
 
 
 

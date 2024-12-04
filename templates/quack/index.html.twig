@@ -73,6 +73,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h3>{{ quack.author.duckname }}</h3>
+                            <img class="img-fluid rounded-circle border" style="width: 70px; height: auto;" src="{{ asset(quack.author.picture) }}" alt="">
                             <p class="card-text">{{ quack.content }}</p>
                             {% if quack.picture %}
                                 <div class="post-image mb-3">
@@ -96,8 +97,8 @@
 
 
                             <div class="mt-2">
-                                <!-- Vérification si l'utilisateur est le propriétaire du post -->
-                                {% if app.user == quack.author %}
+
+                                {% if app.user == quack.author or is_granted('ROLE_MANAGER')%}
                                     <a href="{{ path('app_quack_edit', {'id': quack.id}) }}" class="btn btn-link">Modifier</a>
                                     <a href="{{ path('app_quack_delete', {'id': quack.id}) }}" class="btn btn-link text-danger">Supprimer</a>
                                 {% endif %}

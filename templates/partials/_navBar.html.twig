@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand ms-1" href="#"><img src="{{asset('image/coincoin.webp')}}"  style="" height="60px"></a>
+        <a class="navbar-brand ms-1" href="{{ path('app_quack-all') }}"><img src="{{asset('image/coincoin.webp')}}"  style="" height="60px" alt=""></a>
         <h1 class="text-light ">QuackNet</h1>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -13,17 +13,30 @@
             <div class="px-2">
                 {% if is_granted('ROLE_USER') %}
                     <h5 class="offcanvas-title  m-1" id="offcanvasDarkNavbarLabel">{{app.user.duckname}}</h5>
-                    <img src="{{ asset(app.user.picture) }}" alt="Duck image" class="img-fluid rounded-circle border" style="width: 70px; height: auto;">
+                    <a href="{{ path('app_duck_update') }}"> <img src="{{ asset(app.user.picture) }}" alt="Duck image" class="img-fluid rounded-circle border" style="width: 70px; height: auto;"></a>
+
                 {% else %}
                     <h5 class="offcanvas-title  m-1" id="offcanvasDarkNavbarLabel">QuackNet</h5>
+                {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin') }}"> ADMIN</a>
+                    </li>
                 {% endif %}
             </div>
 
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_quack-all') }}">Quacks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('update_duck_password') }}"> Modifier le mot de passe</a>
+                        </li>
+
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('signup') }}">Inscription</a>
                     </li>
@@ -33,12 +46,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('logout') }}">Deconexion</a>
                     </li>
-                    {% if is_granted('ROLE_USER') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_quack-all') }}">Quacks</a>
-                        </li>
 
-                    {% endif %}
                 </ul>
 
             </div>

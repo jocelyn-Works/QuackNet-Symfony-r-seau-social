@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-primary text-white text-center py-4">
+                        <h3><i class="fas fa-user-edit"></i> Modifier mon profil</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        {{ form_start(form) }}
+
+                        <div class="form-group mb-4">
+                            {{ form_label(form.firstname, 'Prénom', {'label_attr': {'class': 'font-weight-bold'}}) }}
+                            {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+                            {% if form.firstname.vars.errors|length > 0 %}
+                                <div class="text-danger mt-1">
+                                    {{ form_errors(form.firstname) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-4">
+                            {{ form_label(form.lastname, 'Nom', {'label_attr': {'class': 'font-weight-bold'}}) }}
+                            {{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+                            {% if form.lastname.vars.errors|length > 0 %}
+                                <div class="text-danger mt-1">
+                                    {{ form_errors(form.lastname) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group mb-4">
+                            {{ form_label(form.duckname, 'Nom de canard', {'label_attr': {'class': 'font-weight-bold'}}) }}
+                            {{ form_widget(form.duckname, {'attr': {'class': 'form-control'}}) }}
+                            {% if form.duckname.vars.errors|length > 0 %}
+                                <div class="text-danger mt-1">
+                                    {{ form_errors(form.duckname) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-4">
+                            {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'font-weight-bold'}}) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                            {% if form.email.vars.errors|length > 0 %}
+                                <div class="text-danger mt-1">
+                                    {{ form_errors(form.email) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-4">
+                            {{ form_label(form.picture, 'Mot de passe', {'label_attr': {'class': 'font-weight-bold'}}) }}
+                            {{ form_widget(form.picture, {'attr': {'class': 'form-control'}}) }}
+                            {% if form.picture.vars.errors|length > 0 %}
+                                <div class="text-danger mt-1">
+                                    {{ form_errors(form.password) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">Enregistrer les modifications</button>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -80,7 +80,9 @@ class Duck implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-
+public function __toString(){
+    return $this->firstname.' '.$this->lastname;
+}
 
     public function __construct()
     {

@@ -32,7 +32,7 @@ class SecurityController extends AbstractController
         $duckForm->handleRequest( $request);
 
         if ($duckForm->isSubmitted() && $duckForm->isValid()) {
-            $duck->setPicture("image/coincoin.webp");
+            $duck->setPicture("image/duck-face.jpg");
 
             $hash = $passwordHasher->hashPassword($duck, $duck->getPassword());
             $duck->setPassword($hash);

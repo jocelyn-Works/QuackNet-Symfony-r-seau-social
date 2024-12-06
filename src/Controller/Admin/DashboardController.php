@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Duck;
+use App\Entity\Quack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -52,5 +53,6 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToRoute('Retour au Site', 'fa fa-undo', 'app_quack-all');
         yield MenuItem::linkToCrud('User', 'fas fa-user', Duck::class);
+        yield MenuItem::linkToCrud('Quack', 'fa-solid fa-envelope', Quack::class);
     }
 }

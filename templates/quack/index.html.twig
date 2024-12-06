@@ -10,6 +10,7 @@
 
             <!-- Colonne centrale (Publications) -->
             <section class="col-md-8 p-3">
+                {% include "partials/_search_data.html.twig"  %}
                 <!-- Formulaire de publication -->
                 <div class="card mb-4">
                     <div class="card-body">
@@ -69,50 +70,85 @@
                 </script>
 
                 <!-- Affichage des publications -->
-                {% for quack in quacks %}
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h3>{{ quack.author.duckname }}</h3>
-                            <img class="img-fluid rounded-circle border" style="width: 70px; height: auto;" src="{{ asset(quack.author.picture) }}" alt="">
-                            <p class="card-text">{{ quack.content }}</p>
-                            {% if quack.picture %}
-                                <div class="post-image mb-3">
-                                    <img src="{{ asset(quack.picture) }}" class="img-fluid rounded" style="height:300px;" alt="Post Image">
+                {% if quackSearch is not empty %}
+                    <!-- Si la barre de recherche retourne des résultats -->
+                    <h3>Résultats de la recherche</h3>
+                    {% for quack in quackSearch %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h3>{{ quack.author.duckname }}</h3>
+                                <img class="img-fluid rounded-circle border" style="width: 70px; height: auto;" src="{{ asset(quack.author.picture) }}" alt="">
+                                <p class="card-text">{{ quack.content }}</p>
+                                {% if quack.picture %}
+                                    <div class="post-image mb-3">
+                                        <img src="{{ asset(quack.picture) }}" class="img-fluid rounded" style="height:300px;" alt="Post Image">
+                                    </div>
+                                {% endif %}
+                                <div class="text-muted">
+                                    <small>{{ quack.createdAt ? quack.createdAt|date('Y-m-d') : '' }}</small>
                                 </div>
-                            {% endif %}
-                            <div class="text-muted">
-                                <small>{{ quack.createdAt ? quack.createdAt|date('Y-m-d') : '' }}</small>
-                            </div>
 
-                            <!-- Gestion des likes -->
-
+                                <!-- Gestion des likes -->
                                 {% include "partials/_like.html.twig" with{rating: quack.rating, from: 'quack', id: quack.id} %}
 
+                                <a href="{{ path('app_comment', {id: quack.id}) }}">
+                                    <i class="fa-regular fa-comment fa-lg"></i>
+                                </a>
 
-                            <a href="{{path('app_comment', {id:quack.id})}}">
-                                <i class="fa-regular fa-comment fa-lg"></i>
-                            </a>
+                                <strong>: {{ quack.nbresponse }}</strong>
 
-                                    <strong>: {{ quack.nbresponse }}</strong>
-
-
-                            <div class="mt-2">
-
-                                {% if app.user == quack.author or is_granted('ROLE_MANAGER')%}
-                                    <a href="{{ path('app_quack_edit', {'id': quack.id}) }}" class="btn btn-link">Modifier</a>
-                                    <a href="{{ path('app_quack_delete', {'id': quack.id}) }}" class="btn btn-link text-danger">Supprimer</a>
-                                {% endif %}
+                                <div class="mt-2">
+                                    {% if app.user == quack.author or is_granted('ROLE_MANAGER') or is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('app_quack_edit', {'id': quack.id}) }}" class="btn btn-link p-4"><i class="fa-solid fa-pen"></i></a>
+                                        <a href="{{ path('app_quack_delete', {'id': quack.id}) }}" class="btn btn-link text-danger p-4"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="{{ path('app_quack_active', {'id': quack.id}) }}" class="p-4"><i class="fa-solid fa-eye-slash"></i></a>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 {% else %}
-                    <div class="alert alert-info">Aucune publication trouvée.</div>
-                {% endfor %}
+                    <!-- Si la recherche est vide, afficher toutes les publications -->
+
+                    {% for quack in quacks %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h3>{{ quack.author.duckname }}</h3>
+                                <img class="img-fluid rounded-circle border" style="width: 70px; height: auto;" src="{{ asset(quack.author.picture) }}" alt="">
+                                <p class="card-text">{{ quack.content }}</p>
+                                {% if quack.picture %}
+                                    <div class="post-image mb-3">
+                                        <img src="{{ asset(quack.picture) }}" class="img-fluid rounded" style="height:300px;" alt="Post Image">
+                                    </div>
+                                {% endif %}
+                                <div class="text-muted">
+                                    <small>{{ quack.createdAt ? quack.createdAt|date('Y-m-d') : '' }}</small>
+                                </div>
+
+                                <!-- Gestion des likes -->
+                                {% include "partials/_like.html.twig" with{rating: quack.rating, from: 'quack', id: quack.id} %}
+
+                                <a href="{{ path('app_comment', {id: quack.id}) }}">
+                                    <i class="fa-regular fa-comment fa-lg"></i>
+                                </a>
+
+                                <strong>: {{ quack.nbresponse }}</strong>
+
+                                <div class="mt-2">
+                                    {% if app.user == quack.author or is_granted('ROLE_MANAGER') or is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('app_quack_edit', {'id': quack.id}) }}" class="btn btn-link p-4"><i class="fa-solid fa-pen"></i></a>
+                                        <a href="{{ path('app_quack_delete', {'id': quack.id}) }}" class="btn btn-link text-danger p-4"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="{{ path('app_quack_active', {'id': quack.id}) }}" class="p-4"><i class="fa-solid fa-eye-slash"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </section>
 
             <!-- Colonne droite (Suggestions, amis, etc.) -->
             {% include "partials/_rightBar.html.twig" %}
-
         </div>
     </div>
 {% endblock %}

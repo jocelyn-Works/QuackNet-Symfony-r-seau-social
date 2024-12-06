@@ -46,6 +46,9 @@ class Quack
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'quack')]
     private Collection $comments;
 
+    #[ORM\Column]
+    private ?bool $active = null;
+
 
     public function __construct()
     {
@@ -214,6 +217,18 @@ class Quack
                 $comment->setQuack(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
 
         return $this;
     }

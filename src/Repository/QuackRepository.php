@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Quack;
+use App\Model\SearchData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,7 @@ class QuackRepository extends ServiceEntityRepository
     public function findAllQuacks() {
         return $this->createQueryBuilder('q')
             ->orderBy('q.created_at', 'DESC')
+            ->where('q.active = 1')
             ->getQuery()
             ->getResult();
     }
@@ -35,6 +37,26 @@ class QuackRepository extends ServiceEntityRepository
             ->orderBy('q.created_at', 'DESC')
             ->getQuery()
             ->getOneOrNullResult();
+
+    }
+
+    public function findBySearch(SearchData $searchData):array
+    {
+        $data = $this->createQueryBuilder('q')
+            ->join('q.author', 'a')
+            ->addSelect('a');
+
+        if (!empty($searchData->query)){
+            $data = $data
+
+                ->where('a.duckname LIKE :query')
+                ->setParameter('query', "%" .  $searchData->query ."%");
+        }
+        $data = $data
+            ->getQuery()
+            ->getResult();
+
+        return $data;
 
     }
 
